@@ -1,0 +1,29 @@
+{
+  "model": "gemma4:e2b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "num_ctx": 8192,
+  "ask_temperature": 0.0,
+  "chat_temperature": 0.6,
+  "ingest_temperature": 0.2,
+  "request_timeout_s": 600,
+
+  "vault_dir": "vault",
+  "raw_dir": "vault/raw",
+  "wiki_dir": "vault/wiki",
+  "index_file": "vault/index.md",
+  "plan_file": "data/wiki_plan.json",
+  "catalog_file": "data/source_catalog.json",
+  "chunks_file": ".index/chunks.json",
+  "drafts_dir": ".index/drafts",
+  "evidence_dir": "evidence",
+
+  "chunk_words": 160,
+  "chunk_overlap_words": 40,
+  "ask_top_k": 5,
+  "search_top_k": 5,
+  "chat_top_k": 3,
+  "min_retrieval_score": 3.0,
+  "chat_retrieval_score": 6.0,
+  "ingest_max_source_chars": 7000,
+  "chat_history_turns": 6
+}

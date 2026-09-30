@@ -1,0 +1,46 @@
+{
+  "_about": "Fixed ask-mode test set, written before the evaluation runs. Kept outside vault/ so retrieval can never find the answer key.",
+  "ask_tests": [
+    {
+      "id": "T1",
+      "kind": "direct, one source",
+      "question": "What mean evaluation score did my trained Ms. Pac-Man agent reach, and what was the untrained baseline?",
+      "expected_source": "vault/raw/Pac-Man DQN Project.md",
+      "expected_passage": "Headline / evaluation table: mean score 492.0 (untrained network) -> 876.0 after 1,000 training games (+384.0).",
+      "expected_answer_contains": ["876", "492"]
+    },
+    {
+      "id": "T2",
+      "kind": "paraphrased, one source",
+      "question": "Why did my handwritten-digit classifier stop working when the digits were moved over by a few pixels?",
+      "expected_source": "vault/raw/MNIST From Scratch Log.md",
+      "expected_passage": "Section 4, Shift experiment: accuracy 91.5% at 0 px falls to 11.5% at 5 px; the model has one weight per pixel position, so moving the ink puts every weight in the wrong place.",
+      "expected_answer_contains": ["pixel"]
+    },
+    {
+      "id": "T3",
+      "kind": "connects two sources",
+      "question": "What learning rate did I choose for the Pac-Man DQN, and what learning rate did I choose for the custom LLM?",
+      "expected_source": "vault/raw/Pac-Man DQN Project.md + vault/raw/Custom LLM Project.md",
+      "expected_passage": "Pac-Man 'My three settings': learning rate 0.0002. Custom LLM 'My choices and prediction': learning rate 0.001 (a peak, with 100-step warmup and cosine decay).",
+      "expected_answer_contains": ["0.0002", "0.001"]
+    },
+    {
+      "id": "T4",
+      "kind": "unsupported (answer not in the wiki)",
+      "question": "How much did I pay for cloud GPU time to train the custom LLM?",
+      "expected_source": "none",
+      "expected_passage": "No source states a price or a cloud GPU rental. The LLM README records CPU training with no CUDA, which is not a cost figure.",
+      "expected_answer_contains": ["INSUFFICIENT EVIDENCE"]
+    }
+  ],
+  "mode_checks": [
+    {"id": "C1", "mode": "chat", "input": "what can we do?", "expect": "Explains real capabilities; no notes lookup; no citations; no insufficient-evidence refusal."},
+    {"id": "C2", "mode": "chat", "input": "what can you help me with?", "expect": "Same as C1: capabilities and a starting point, no notes lookup."},
+    {"id": "C3", "mode": "chat", "input": "Draft a short three-step plan for my next Pac-Man experiment.", "expect": "A plan labelled as suggestions; any facts from notes carry [N#] citations."},
+    {"id": "C4", "mode": "chat", "input": "make that shorter", "expect": "Shortens the C3 plan using conversation context; no new notes lookup."},
+    {"id": "C5", "mode": "chat", "input": "By the way, my Pac-Man agent scored 5,000 points in its best evaluation game.", "expect": "A claim made only in chat. It lives in chat history, not in the sources."},
+    {"id": "C6", "mode": "search", "input": "exploration rate", "expect": "Original passages with paths and line numbers; no generated answer; no model call."},
+    {"id": "C7", "mode": "ask", "input": "Did my Pac-Man agent score 5,000 points in its best evaluation game?", "expect": "Answers from the evaluation table (best trained game 1130), not from the C5 chat claim; ask receives no chat history."}
+  ]
+}

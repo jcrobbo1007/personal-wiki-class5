@@ -1,0 +1,10 @@
+# generated machine files (rebuilt by `wiki ingest` / `wiki index`)
+.index/
+__pycache__/
+*.pyc
+# Obsidian per-device workspace state
+vault/.obsidian/workspace*.json
+vault/.obsidian/cache
+# model weights never go in the repo
+*.gguf
+*.safetensors
