@@ -1,0 +1,29 @@
+[
+  {
+    "id": "custom-llm",
+    "path": "vault/raw/Custom LLM Project.md",
+    "title": "Custom nanoGPT LLM project README (Class 4)",
+    "origin": "github.com/jcrobbo1007/custom-llm-class4 README.md",
+    "sha256": "4ced596381b065241496bac1fc2c6d6229c5fb8f365f0ace4c8617c72f997a61",
+    "bytes": 47145,
+    "note_name": "Custom LLM Project"
+  },
+  {
+    "id": "mnist",
+    "path": "vault/raw/MNIST From Scratch Log.md",
+    "title": "MNIST from scratch run log (Class 3)",
+    "origin": "Jack's Class 3 run log (AI Class project notes)",
+    "sha256": "8231edc0b2eeb8282f9a8a7aca1e5ef544ae050857d4742322ddb4f51264d1ea",
+    "bytes": 3218,
+    "note_name": "MNIST From Scratch Log"
+  },
+  {
+    "id": "pacman-dqn",
+    "path": "vault/raw/Pac-Man DQN Project.md",
+    "title": "Ms. Pac-Man DQN project README (Class 3)",
+    "origin": "github.com/jcrobbo1007/pacman-dqn-class3 README.md",
+    "sha256": "98d305c202bdcd3c4c01472e536360a06334fce0f4ab92d3b2bc6b31ba35791e",
+    "bytes": 21290,
+    "note_name": "Pac-Man DQN Project"
+  }
+]

@@ -1,0 +1,108 @@
+{
+  "catalog": [
+    {
+      "id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "title": "Custom nanoGPT LLM project README (Class 4)",
+      "origin": "github.com/jcrobbo1007/custom-llm-class4 README.md",
+      "sha256": "4ced596381b065241496bac1fc2c6d6229c5fb8f365f0ace4c8617c72f997a61",
+      "bytes": 47145,
+      "note_name": "Custom LLM Project"
+    },
+    {
+      "id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "title": "MNIST from scratch run log (Class 3)",
+      "origin": "Jack's Class 3 run log (AI Class project notes)",
+      "sha256": "8231edc0b2eeb8282f9a8a7aca1e5ef544ae050857d4742322ddb4f51264d1ea",
+      "bytes": 3218,
+      "note_name": "MNIST From Scratch Log"
+    },
+    {
+      "id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "title": "Ms. Pac-Man DQN project README (Class 3)",
+      "origin": "github.com/jcrobbo1007/pacman-dqn-class3 README.md",
+      "sha256": "98d305c202bdcd3c4c01472e536360a06334fce0f4ab92d3b2bc6b31ba35791e",
+      "bytes": 21290,
+      "note_name": "Pac-Man DQN Project"
+    }
+  ],
+  "passages": 102,
+  "notes": [
+    {
+      "note": "vault/wiki/Projects/MNIST From Scratch.md",
+      "status": "updated",
+      "excerpts": 4,
+      "input_chars": 2310,
+      "backend": "ollama",
+      "model": "gemma4:e2b",
+      "wall_seconds": 178.7,
+      "prompt_tokens": 1057,
+      "output_tokens": 365,
+      "load_seconds": 0.0,
+      "total_seconds": 178.67,
+      "tokens_per_second": 2.0
+    },
+    {
+      "note": "vault/wiki/Concepts/Learning Rate Choices.md",
+      "status": "updated",
+      "excerpts": 4,
+      "input_chars": 5035,
+      "backend": "ollama",
+      "model": "gemma4:e2b",
+      "wall_seconds": 12.11,
+      "prompt_tokens": 1770,
+      "output_tokens": 323,
+      "load_seconds": 0.01,
+      "total_seconds": 11.82,
+      "tokens_per_second": 27.8
+    },
+    {
+      "note": "vault/wiki/Concepts/Evaluation and Small Samples.md",
+      "status": "updated",
+      "excerpts": 5,
+      "input_chars": 3903,
+      "backend": "ollama",
+      "model": "gemma4:e2b",
+      "wall_seconds": 15.36,
+      "prompt_tokens": 1598,
+      "output_tokens": 354,
+      "load_seconds": 0.44,
+      "total_seconds": 15.32,
+      "tokens_per_second": 24.2
+    },
+    {
+      "note": "vault/wiki/Concepts/Loss vs Real Performance.md",
+      "status": "updated",
+      "excerpts": 5,
+      "input_chars": 5674,
+      "backend": "ollama",
+      "model": "gemma4:e2b",
+      "wall_seconds": 13.54,
+      "prompt_tokens": 2037,
+      "output_tokens": 297,
+      "load_seconds": 0.0,
+      "total_seconds": 13.54,
+      "tokens_per_second": 22.2
+    },
+    {
+      "note": "vault/wiki/Concepts/Translation Sensitivity.md",
+      "status": "updated",
+      "excerpts": 2,
+      "input_chars": 1667,
+      "backend": "ollama",
+      "model": "gemma4:e2b",
+      "wall_seconds": 10.88,
+      "prompt_tokens": 803,
+      "output_tokens": 271,
+      "load_seconds": 0.0,
+      "total_seconds": 10.88,
+      "tokens_per_second": 25.3
+    }
+  ],
+  "wall_seconds": 230.9,
+  "internet_reachable": false,
+  "model": "gemma4:e2b",
+  "run_at": "2026-09-30T10:32:01"
+}

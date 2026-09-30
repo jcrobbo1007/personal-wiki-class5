@@ -1,0 +1,92 @@
+{
+  "mode": "ask",
+  "execution": "local",
+  "model": "gemma4:e2b",
+  "question": "Why did my handwritten-digit classifier stop working when the digits were moved over by a few pixels?",
+  "retrieved": [
+    {
+      "id": "mnist:33-38",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 3. Three mistakes",
+      "line_start": 33,
+      "line_end": 38,
+      "text": "Common thread: the distinguishing feature is one small region of the stroke, and the model\ncannot look at a region — it sums all 784 pixels at once, so a few decisive pixels get\noutvoted by the hundreds the two digits share.\n\nTop confusions across the 854 errors: 9→4 (42), 2→8 (40), 5→3 (38), 4→9 (36), 7→9 (34), 5→8 (30).\nRoughly symmetric, which points at genuine shape overlap rather than a systematic bug.",
+      "score": 12.05,
+      "label": "S1"
+    },
+    {
+      "id": "mnist:25-37",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 3. Three mistakes",
+      "line_start": 25,
+      "line_end": 37,
+      "text": "## 3. Three mistakes\n\n| Image | True → said | Confidence | Why it's hard |\n|---|---|---|---|\n| #2044 | 2 → 7 | 99.6% | Written flat — long horizontal top bar, one straight diagonal, no bottom-left curl. Pixel for pixel it is a 7 with a foot. A *confident* error. |\n| #565 | 4 → 9 | 83% | The two top strokes touch, closing the gap that is the only thing separating a 4 from a 9. |\n| #340 | 5 → 3 | 79% | One flowing curve, no flat top bar; the ink lands where a 3's two bowls would be. |\n\nCommon thread: the distinguishing feature is one small region of the stroke, and the model\ncannot look at a region — it sums all 784 pixels at once, so a few decisive pixels get\noutvoted by the hundreds the two digits share.\n\nTop confusions across the 854 errors: 9→4 (42), 2→8 (40), 5→3 (38), 4→9 (36), 7→9 (34), 5→8 (30).",
+      "score": 11.12,
+      "label": "S2"
+    },
+    {
+      "id": "pacman-dqn:267-279",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3 > Next experiment",
+      "line_start": 267,
+      "line_end": 279,
+      "text": "## Next experiment\n\nChange **`REPLAY_CAPACITY`** from `5000` to `25000`, holding exploration 0.10, learning rate\n0.0002 and 1,000 episodes fixed, because the plateau from about game 500 and the unstable\none-game checks fit a network that only ever learns from its last few games. At about 600\ndecisions per game, 25,000 decisions is roughly 40 games of memory. By the notebook's own formula\nthat is about 841 MiB of pixels, well within this laptop's 31.5 GB.\n\nThis changes one of the notebook's fixed settings, so that run would be declared as a deliberate\nchange and its evaluation mean would not be comparable on the class leaderboard. It will also be\nslower per update, since each batch is sampled from a copy of the whole replay memory. **If the\n100-game mean and points per decision keep rising past game 500 and the seed-101 checks swing\nless, the narrow replay was holding it back. If it plateaus at a similar level around the same",
+      "score": 5.59,
+      "label": "S3"
+    },
+    {
+      "id": "custom-llm:731-738",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > What I learned",
+      "line_start": 731,
+      "line_end": 738,
+      "text": "**The thing I actually learned.** Loss and coverage are not competence. I moved loss to 0.68,\nadded 265 vocabulary types, and lifted the score 20 → 24 — and the model still cannot finish a\nsentence copied out of its own training file. Four of those five new scorable cases went to a\nword I never put in the prompt. The score went up for a reason I did not design and did not\npredict, while the two things I *did* design for both failed. Reading the four-row table\nwithout the per-case probabilities would have told me the extension worked.\n\n---",
+      "score": 5.11,
+      "label": "S4"
+    },
+    {
+      "id": "mnist:40-57",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 4. Shift experiment",
+      "line_start": 40,
+      "line_end": 57,
+      "text": "## 4. Shift experiment\n\n| Shift | Accuracy |\n|---|---|\n| 0 px | 91.5% |\n| 1 px | 85.6% |\n| 2 px | 65.7% |\n| 3 px | 43.3% |\n| 4 px | 23.2% |\n| 5 px | 11.5% (chance = 10%) |\n\nThe limitation: one weight per *pixel position*. The model never learned what a 3 looks\nlike — it learned which coordinates in a 28×28 box tend to be lit, given MNIST's centring.\nMove the ink and every weight points at the wrong place. Drawing each column of `W` back\nout as a 28×28 image shows blurry fixed stencils, which is the whole explanation.\n\nThis is the argument for convolutions (Class 4): learn small local patterns and look for\nthem anywhere in the image.",
+      "score": 5.08,
+      "label": "S5"
+    }
+  ],
+  "answer": "The model stopped working when the digits were moved over by a few pixels because it learned which coordinates in a $28 \\times 28$ box tend to be lit, given MNIST's centering, rather than learning what a specific digit looks like [S5]. This resulted in blurry fixed stencils when drawing each column of the weight matrix back out as a $28 \\times 28$ image [S5].",
+  "model_called": true,
+  "stats": {
+    "backend": "ollama",
+    "model": "gemma4:e2b",
+    "wall_seconds": 3.41,
+    "prompt_tokens": 1568,
+    "output_tokens": 89,
+    "load_seconds": 0.01,
+    "total_seconds": 3.38,
+    "tokens_per_second": 27.8
+  },
+  "prompt_chars": 4054,
+  "citations": [
+    {
+      "label": "S5",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 4. Shift experiment",
+      "lines": "40-57"
+    }
+  ],
+  "check": {
+    "status": "cited",
+    "notes": []
+  },
+  "run_info": {
+    "internet_reachable": true,
+    "run_at": "2026-09-30T00:01:45"
+  }
+}

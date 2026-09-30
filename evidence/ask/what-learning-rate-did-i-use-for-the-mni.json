@@ -1,0 +1,92 @@
+{
+  "mode": "ask",
+  "execution": "local",
+  "model": "gemma4:e2b",
+  "question": "What learning rate did I use for the MNIST model?",
+  "retrieved": [
+    {
+      "id": "mnist:9-17",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 1. Where the model lives in the code",
+      "line_start": 9,
+      "line_end": 17,
+      "text": "## 1. Where the model lives in the code\n\n| Piece | Line |\n|---|---|\n| Weights | `W = np.zeros((784, 10))` and `b = np.zeros(10)` — 7,840 + 10 = **7,850 parameters** |\n| Loss | `loss = -np.mean(np.log(probs[np.arange(len(y_train)), y_train] + 1e-9))` — cross-entropy: negative log of the probability given to the correct label, averaged over 60,000 images |\n| Update step | `W -= learning_rate * (X_train.T @ grad)` and `b -= learning_rate * grad.sum(axis=0)` — subtract a small multiple of the gradient |\n\nLoss falls 2.303 (= ln 10, pure guessing) → 0.326.",
+      "score": 8.45,
+      "label": "S1"
+    },
+    {
+      "id": "mnist:1-7",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log",
+      "line_start": 1,
+      "line_end": 7,
+      "text": "# Class 3 — MNIST from scratch, run log\n\nNotebook: `pepealonso95/mnist-from-scratch` (Colab badge link in the repo README).\nReproduced top to bottom with the notebook's own settings: 300 epochs, learning rate 0.5,\nweights initialised to zero, no randomness — so the numbers below are exactly repeatable.\n\nPublished write-up (artifact): https://claude.ai/code/artifact/36e603a6-08c4-4ac1-bc44-baf5918b45e8",
+      "score": 8.28,
+      "label": "S2"
+    },
+    {
+      "id": "mnist:40-57",
+      "source_id": "mnist",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log > 4. Shift experiment",
+      "line_start": 40,
+      "line_end": 57,
+      "text": "## 4. Shift experiment\n\n| Shift | Accuracy |\n|---|---|\n| 0 px | 91.5% |\n| 1 px | 85.6% |\n| 2 px | 65.7% |\n| 3 px | 43.3% |\n| 4 px | 23.2% |\n| 5 px | 11.5% (chance = 10%) |\n\nThe limitation: one weight per *pixel position*. The model never learned what a 3 looks\nlike — it learned which coordinates in a 28×28 box tend to be lit, given MNIST's centring.\nMove the ink and every weight points at the wrong place. Drawing each column of `W` back\nout as a 28×28 image shows blurry fixed stencils, which is the whole explanation.\n\nThis is the argument for convolutions (Class 4): learn small local patterns and look for\nthem anywhere in the image.",
+      "score": 6.42,
+      "label": "S3"
+    },
+    {
+      "id": "custom-llm:208-211",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > Evidence > One real gradient and weight update",
+      "line_start": 208,
+      "line_end": 211,
+      "text": "The learning rate here is **1e-05, not the 0.001 I chose**, because the notebook warms up\nover the first `min(100, steps/10)` = 100 steps: at step 0 the multiplier is 1/100. This is\nthe concrete reason LEARNING_RATE is a peak and not a constant. Repeat this arithmetic\n111,872 times per step, 3,000 times, and the loss falls from 4.93 to 0.68.",
+      "score": 4.44,
+      "label": "S4"
+    },
+    {
+      "id": "custom-llm:190-210",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > Evidence > One real gradient and weight update",
+      "line_start": 190,
+      "line_end": 210,
+      "text": "### One real gradient and weight update\n\nFrom `first_update` in [inspection.json](results/exp1-starter/inspection.json), captured at\n**step 0**, coordinate 0 of `customer`'s embedding:\n\n```\nbefore   = -0.057591915130615234\ngradient =  0.0006925859488546848\nlr       =  0.00001            (1e-05, not 0.001 — see below)\nafter    = -0.05760190635919571\n```\n\nChange = −0.000009991. The gradient says \"increasing this number would increase the loss\",\nso the optimiser moves it *down*. The size is `lr × 1` ≈ 1e-05 rather than\n`lr × gradient` ≈ 7e-09, because **AdamW normalises by the running magnitude of the\ngradient** — at the very first step the ratio of gradient to its own RMS is ≈ 1, so the step\nis essentially the full learning rate in whichever direction reduces loss.\n\nThe learning rate here is **1e-05, not the 0.001 I chose**, because the notebook warms up\nover the first `min(100, steps/10)` = 100 steps: at step 0 the multiplier is 1/100. This is\nthe concrete reason LEARNING_RATE is a peak and not a constant. Repeat this arithmetic",
+      "score": 4.24,
+      "label": "S5"
+    }
+  ],
+  "answer": "The learning rate used for the MNIST model was 0.5 [S2].",
+  "model_called": true,
+  "stats": {
+    "backend": "ollama",
+    "model": "gemma4:e2b",
+    "wall_seconds": 21.88,
+    "prompt_tokens": 1592,
+    "output_tokens": 18,
+    "load_seconds": 0.0,
+    "total_seconds": 21.79,
+    "tokens_per_second": 24.4
+  },
+  "prompt_chars": 3720,
+  "citations": [
+    {
+      "label": "S2",
+      "path": "vault/raw/MNIST From Scratch Log.md",
+      "section": "Class 3 — MNIST from scratch, run log",
+      "lines": "1-7"
+    }
+  ],
+  "check": {
+    "status": "cited",
+    "notes": []
+  },
+  "run_info": {
+    "internet_reachable": false,
+    "run_at": "2026-09-30T10:32:26"
+  }
+}

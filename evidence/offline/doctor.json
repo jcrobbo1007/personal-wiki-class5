@@ -1,0 +1,49 @@
+{
+  "device": {
+    "captured_at": "2026-09-30T10:22:27",
+    "os": "Windows 11 (10.0.26200)",
+    "machine": "AMD64",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "cpu_threads": 8,
+    "ram_total_gb": 33.9,
+    "ram_available_gb": 8.4,
+    "gpus": [
+      "Intel(R) Arc(TM) 140V GPU (16GB)"
+    ],
+    "disk_free_gb": 532.9,
+    "python": "3.13.14",
+    "ollama_cli": "ollama version is 0.35.0"
+  },
+  "runtime": {
+    "backend": "ollama",
+    "url": "http://127.0.0.1:11434",
+    "model": "gemma4:e2b",
+    "ollama_version": "0.35.0",
+    "digest": "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2",
+    "file_size_gb": 4.59,
+    "details": {
+      "parent_model": "gemma4-validation-20260929:e2b-imatrix-attention-q6-q8-draft2",
+      "format": "gguf",
+      "family": "gemma4",
+      "families": [
+        "gemma4"
+      ],
+      "parameter_size": "4.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 1536
+    },
+    "installed_models": [
+      "gemma4:e2b"
+    ],
+    "ollama_process_memory_gb": 0.03
+  },
+  "internet_reachable": false,
+  "config": {
+    "model": "gemma4:e2b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "num_ctx": 8192,
+    "ask_top_k": 5,
+    "chunk_words": 160
+  }
+}

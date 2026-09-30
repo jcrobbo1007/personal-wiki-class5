@@ -1,0 +1,92 @@
+{
+  "mode": "ask",
+  "execution": "local",
+  "model": "gemma4:e2b",
+  "question": "What mean evaluation score did my trained Ms. Pac-Man agent reach, and what was the untrained baseline?",
+  "retrieved": [
+    {
+      "id": "pacman-dqn:104-122",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3 > Evaluation: all five games, before and after",
+      "line_start": 104,
+      "line_end": 122,
+      "text": "## Evaluation: all five games, before and after\n\nSame five seeds (101, 202, 303, 404, 505), 5% exploration, 3,000-decision cap, before and\nafter. The baseline is an **untrained network**, not a random-action agent. Scores are raw game\npoints; training rewards are clipped to [−1, +1].\n\n| Game (seed) | Before (untrained) | After (1,000 episodes) | Change | Decisions before → after |\n|---|---|---|---|---|\n| 1 (101) | 350 | 520 | +170 | 560 → 534 |\n| 2 (202) | 500 | 990 | +490 | 597 → 659 |\n| 3 (303) | 320 | 1130 | +810 | 614 → 916 |\n| 4 (404) | 800 | 870 | +70 | 640 → 708 |\n| 5 (505) | 490 | 870 | +380 | 534 → 744 |\n| **Mean** | **492.0** | **876.0** | **+384.0** | 589.0 → 712.2 |\n\nFull data: [`results/comparison.json`](results/comparison.json).\nTime-limited games before / after: 0 / 0.\n\nNote that the evaluation games did run longer on average, unlike the training games. Evaluation",
+      "score": 18.61,
+      "label": "S1"
+    },
+    {
+      "id": "pacman-dqn:1-12",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3",
+      "line_start": 1,
+      "line_end": 12,
+      "text": "# Ms. Pac-Man DQN — Class 3\n\nTraining a Deep Q-Network to play Ms. Pac-Man with the class notebook, three chosen\nhyperparameters, and the notebook's own before/after evaluation.\n\n**Headline:** mean score over five evaluation games went from **492.0** (untrained network) to\n**876.0** after 1,000 training games — a change of **+384.0**. The comparison is paired — the\nsame five seeds on the same maze, before and after — and all 5 of 5 seeds improved; a one-sided\nsign test puts that at p ≈ 0.031, so this is evidence the trained agent is better on these five\nstarts. But the per-seed gains range from +70 to +810, so five games estimate the *size* of the\nimprovement (+384) poorly. The training log also says the gain came from scoring faster, not\nfrom surviving longer.",
+      "score": 17.99,
+      "label": "S2"
+    },
+    {
+      "id": "pacman-dqn:257-265",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3 > One limitation I observed",
+      "line_start": 257,
+      "line_end": 265,
+      "text": "## One limitation I observed\n\n**The agent never learned to survive.** Mean game length in training was 566.9 decisions in the\nfirst 100 games and 578.1 in the last 100, and none of the 1,000 games reached the time limit\n([`results/training.csv`](results/training.csv)). The GIF after 1,000 episodes shows it\nlosing a life by running straight into a ghost inside the first 20 seconds, and the same one-game\ncheck on seed 101 scored anywhere from 90 to 1,360 points after game 500. Whatever it learned,\nit did not include getting out of a ghost's way, and its play on the same starting position was\nstill unstable at the end.",
+      "score": 14.78,
+      "label": "S3"
+    },
+    {
+      "id": "custom-llm:302-314",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > The fixed 48-case language evals > Four-row comparison",
+      "line_start": 302,
+      "line_end": 314,
+      "text": "### Four-row comparison\n\n| Experiment / stage | Correct / 48 | Scorable / 48 | Accuracy among scorable | Coverage | Results |\n| --- | --- | --- | --- | --- | --- |\n| Starter, untrained | 9 | 24 | 37.50% | 50.0% | [json](results/exp1-starter/language_evals/untrained/eval_results.json) · [csv](results/exp1-starter/language_evals/untrained/eval_results.csv) · [summary](results/exp1-starter/language_evals/untrained/eval_summary.json) |\n| Starter, trained | **20** | 24 | **83.33%** | 50.0% | [json](results/exp1-starter/language_evals/final/eval_results.json) · [csv](results/exp1-starter/language_evals/final/eval_results.csv) · [summary](results/exp1-starter/language_evals/final/eval_summary.json) |\n| Expanded, untrained | 3 | 29 | 10.34% | 60.4% | [json](results/exp2-extended/language_evals/untrained/eval_results.json) · [csv](results/exp2-extended/language_evals/untrained/eval_results.csv) · [summary](results/exp2-extended/language_evals/untrained/eval_summary.json) |\n| Expanded, trained | **24** | 29 | **82.76%** | 60.4% | [json](results/exp2-extended/language_evals/final/eval_results.json) · [csv](results/exp2-extended/language_evals/final/eval_results.csv) · [summary](results/exp2-extended/language_evals/final/eval_summary.json) |\n\nReading the four rows together matters more than the headline. All-case success rose 20 → 24,\nbut **accuracy among scorable cases fell slightly, 83.33% → 82.76%**. The extension added\nfive gradeable cases and got all five wrong. The +4 came from somewhere else entirely — the\ntransfer group, below.",
+      "score": 4.25,
+      "label": "S4"
+    },
+    {
+      "id": "custom-llm:316-322",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > The fixed 48-case language evals > By group",
+      "line_start": 316,
+      "line_end": 322,
+      "text": "### By group\n\n| Group | Exp 1 untrained | Exp 1 trained | Exp 2 untrained | Exp 2 trained |\n| --- | --- | --- | --- | --- |\n| starter_patterns (16) | 6/16 | **16/16** | 0/16 | **16/16** |\n| starter_transfer (8) | 3/8 | 4/8 | 0/8 | **8/8** |\n| extend_corpus (24) | 0/24 *(0 scorable)* | 0/24 *(0 scorable)* | 0/24 *(5 scorable)* | **0/24** *(5 scorable)* |",
+      "score": 4.04,
+      "label": "S5"
+    }
+  ],
+  "answer": "The mean score for the trained Ms. Pac-Man agent reached 876.0, while the untrained baseline score was 492.0 [S2].",
+  "model_called": true,
+  "stats": {
+    "backend": "ollama",
+    "model": "gemma4:e2b",
+    "wall_seconds": 32.99,
+    "prompt_tokens": 2072,
+    "output_tokens": 37,
+    "load_seconds": 0.0,
+    "total_seconds": 32.96,
+    "tokens_per_second": 20.3
+  },
+  "prompt_chars": 4957,
+  "citations": [
+    {
+      "label": "S2",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3",
+      "lines": "1-12"
+    }
+  ],
+  "check": {
+    "status": "cited",
+    "notes": []
+  },
+  "run_info": {
+    "internet_reachable": false,
+    "run_at": "2026-09-30T10:32:27"
+  }
+}

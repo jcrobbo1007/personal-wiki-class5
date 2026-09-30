@@ -1,0 +1,325 @@
+﻿Offline evidence run started 2026-09-30T10:22:13
+
+===== Network check: internet reachable = False =====
+
+Name                           Status      
+----                           ------      
+Wi-Fi 2                        Not Present 
+Wi-Fi                          Disconnected
+Wi-Fi 4                        Not Present 
+Bluetooth Network Connection 2 Disconnected
+
+
+
+(step took 3 s)
+
+===== Restart Ollama (local runtime only) =====
+NAME          ID              SIZE      MODIFIED     
+gemma4:e2b    b37049369adf    4.6 GB    11 hours ago    
+(step took 8.5 s)
+
+===== wiki --help =====
+wiki — personal wiki CLI (local Gemma + RAG)
+
+Commands
+  wiki ingest ./vault/raw        Catalogue the originals, rebuild the retrieval index, have
+                                 local Gemma write the linked wiki notes, refresh vault/index.md.
+      --note "Title"             regenerate one planned note only
+      --source ID                re-ingest one original (e.g. mnist): only notes built from it
+      --force                    overwrite notes marked reviewed: true
+      --dry-run                  show what would be written, no model calls
+  wiki index                     Rebuild only the retrieval index (no model needed).
+  wiki search "query"            Show original passages + file paths + line numbers.
+                                 No answer is generated; works without the model running.
+  wiki ask "question"            Standalone factual answer from retrieved evidence, with
+                                 citations, or INSUFFICIENT EVIDENCE. Ignores chat history.
+      --save                     also write an evidence card to evidence/ask/
+  wiki chat                      Talk to Margin, the study-partner persona. Uses the conversation
+                                 and looks up notes only when a message needs them.
+                                 In chat: /notes <q>  /reset  /help  /exit
+  wiki check                     Review aid: filenames, headings, links, sources, and numbers
+                                 in notes that do not appear in the cited originals.
+  wiki doctor                    Device specs, runtime and model identity, internet status.
+  wiki eval --out NAME           Run the four fixed ask tests (tests/questions.json) and save
+                                 evidence cards to evidence/NAME/.
+  wiki modecheck --out NAME      Run the chat/search/ask boundary checks and save a transcript.
+
+Options (any command)
+  --mode local                   Execution setting. Only 'local' exists; it is the default.
+  --model NAME                   Override the Ollama model (default from config.json).
+
+Configuration: config.json (model, Ollama URL, context size, retrieval settings).
+Instructions:  prompts/persona.md (chat), prompts/wiki-instructions.md (ask),
+               prompts/ingest-instructions.md (ingest). The harness loads these; the
+               model does not read files itself.
+Requires:      Python 3.10+ (standard library only) and Ollama with the model pulled.
+
+(step took 0.9 s)
+
+===== wiki doctor (device + model, before) =====
+{
+  "device": {
+    "captured_at": "2026-09-30T10:22:27",
+    "os": "Windows 11 (10.0.26200)",
+    "machine": "AMD64",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "cpu_threads": 8,
+    "ram_total_gb": 33.9,
+    "ram_available_gb": 8.4,
+    "gpus": [
+      "Intel(R) Arc(TM) 140V GPU (16GB)"
+    ],
+    "disk_free_gb": 532.9,
+    "python": "3.13.14",
+    "ollama_cli": "ollama version is 0.35.0"
+  },
+  "runtime": {
+    "backend": "ollama",
+    "url": "http://127.0.0.1:11434",
+    "model": "gemma4:e2b",
+    "ollama_version": "0.35.0",
+    "digest": "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2",
+    "file_size_gb": 4.59,
+    "details": {
+      "parent_model": "gemma4-validation-20260929:e2b-imatrix-attention-q6-q8-draft2",
+      "format": "gguf",
+      "family": "gemma4",
+      "families": [
+        "gemma4"
+      ],
+      "parameter_size": "4.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 1536
+    },
+    "installed_models": [
+      "gemma4:e2b"
+    ],
+    "ollama_process_memory_gb": 0.03
+  },
+  "internet_reachable": false,
+  "config": {
+    "model": "gemma4:e2b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "num_ctx": 8192,
+    "ask_top_k": 5,
+    "chunk_words": 160
+  }
+}
+Saved: evidence\offline\doctor.json
+(step took 3.8 s)
+
+===== wiki ingest ./vault/raw =====
+Catalogued 3 original source(s): custom-llm, mnist, pacman-dqn
+Retrieval index rebuilt: 102 passages -> .index\chunks.json
+  updated   vault/wiki/Projects/Ms Pac-Man DQN.md  (51.08 s)
+  updated   vault/wiki/Projects/Custom nanoGPT LLM.md  (38.19 s)
+  updated   vault/wiki/Projects/MNIST From Scratch.md  (25.53 s)
+  updated   vault/wiki/Concepts/Deep Q-Networks.md  (26.19 s)
+  updated   vault/wiki/Concepts/Exploration vs Exploitation.md  (43.61 s)
+  updated   vault/wiki/Concepts/Learning Rate Choices.md  (40.5 s)
+  updated   vault/wiki/Concepts/Evaluation and Small Samples.md  (33.43 s)
+  updated   vault/wiki/Concepts/Loss vs Real Performance.md  (34.27 s)
+  updated   vault/wiki/Concepts/Embeddings and Attention.md  (28.74 s)
+  updated   vault/wiki/Concepts/Translation Sensitivity.md  (17.16 s)
+Index written: vault\index.md
+Done in 338.8 s. Internet reachable: False. Log: evidence\logs\ingest-20260930-102810.json
+(step took 339.2 s)
+
+===== Re-ingest one source (mnist) to check for duplicates =====
+Catalogued 3 original source(s): custom-llm, mnist, pacman-dqn
+Retrieval index rebuilt: 102 passages -> .index\chunks.json
+  updated   vault/wiki/Projects/MNIST From Scratch.md  (178.7 s)
+  updated   vault/wiki/Concepts/Learning Rate Choices.md  (12.11 s)
+  updated   vault/wiki/Concepts/Evaluation and Small Samples.md  (15.36 s)
+  updated   vault/wiki/Concepts/Loss vs Real Performance.md  (13.54 s)
+  updated   vault/wiki/Concepts/Translation Sensitivity.md  (10.88 s)
+Done in 230.9 s. Internet reachable: False. Log: evidence\logs\ingest-20260930-103201.json
+(step took 231.3 s)
+
+===== Duplicate check =====
+notes before re-ingest: 10   after: 10
+No new files: re-ingest updated notes in place.
+(step took 0 s)
+
+===== wiki check (links, headings, sources, numbers) =====
+OK vault/wiki/Concepts/Deep Q-Networks.md  (reviewed: false)
+OK vault/wiki/Concepts/Embeddings and Attention.md  (reviewed: false)
+OK vault/wiki/Concepts/Evaluation and Small Samples.md  (reviewed: false)
+OK vault/wiki/Concepts/Exploration vs Exploitation.md  (reviewed: false)
+OK vault/wiki/Concepts/Learning Rate Choices.md  (reviewed: false)
+OK vault/wiki/Concepts/Loss vs Real Performance.md  (reviewed: false)
+OK vault/wiki/Concepts/Translation Sensitivity.md  (reviewed: false)
+OK vault/wiki/Projects/Custom nanoGPT LLM.md  (reviewed: false)
+OK vault/wiki/Projects/MNIST From Scratch.md  (reviewed: false)
+OK vault/wiki/Projects/Ms Pac-Man DQN.md  (reviewed: false)
+
+0 issue(s).
+(step took 1.9 s)
+
+===== wiki search "exploration rate" (no model call) =====
+search (no model call) — 5 passage(s) for: exploration rate
+
+[1] vault/raw/Pac-Man DQN Project.md — Ms. Pac-Man DQN — Class 3 > My three settings (lines 39-51)  score 5.7
+    **Deviations from the stock notebook.**
+    - `SHOW_POPUPS = False` (the cell after section 2), because the notebook ran in the background
+      with no desktop to show the Tk popup. Inline GIFs are unaffected.
+    - Executed with `jupyter nbconvert --to notebook --execute --inplace` instead of the Run All
+      button. Same cells, same order, outputs kept in the committed notebook.
+    
+    Nothing else in the notebook changed. The evaluation block is untouched: seeds
+    `[101, 202, 303, 404, 505]`, 5% evaluation exploration, 3,000-decision cap, `SEED = 42`
+    (confirmed in [`results/config.json`](results/config.json)).
+    
+    **Also disclosed:** before choosing the settings, a 5-game timing probe ran on a separate copy of
+    the notebook (default exploration and learning rate) purely to measure speed. Its outputs are not
+    used anywhere in this write-up and are not in the repo. There was no other run.
+
+[2] vault/raw/Pac-Man DQN Project.md — Ms. Pac-Man DQN — Class 3 > Next experiment (lines 267-279)  score 4.36
+    ## Next experiment
+    
+    Change **`REPLAY_CAPACITY`** from `5000` to `25000`, holding exploration 0.10, learning rate
+    0.0002 and 1,000 episodes fixed, because the plateau from about game 500 and the unstable
+    one-game checks fit a network that only ever learns from its last few games. At about 600
+    decisions per game, 25,000 decisions is roughly 40 games of memory. By the notebook's own formula
+    that is about 841 MiB of pixels, well within this laptop's 31.5 GB.
+    
+    This changes one of the notebook's fixed settings, so that run would be declared as a deliberate
+    change and its evaluation mean would not be comparable on the class leaderboard. It will also be
+    slower per update, since each batch is sampled from a copy of the whole replay memory. **If the
+    100-game mean and points per decision keep rising past game 500 and the seed-101 checks swing
+    less, the narrow replay was holding it back. If it plateaus at a similar level around the same
+
+[3] vault/raw/Pac-Man DQN Project.md — Ms. Pac-Man DQN — Class 3 > My three settings (lines 27-32)  score 4.13
+    ## My three settings
+    
+    | Setting | Value | Why |
+    |---|---|---|
+    | Exploration | `0.10` | Half the notebook's 0.20 default, still inside the usual 0.1–0.2 band. It stays fixed at 10% for all 1,000 games after the 1,000-decision random warm-up — there is no decay. A lower rate is defensible partly because the environment already injects randomness: `sticky_action_probability` is 0.25 ([`results/config.json`](results/config.json)), so on every emulator frame there is a 25% chance the previous joystick input repeats instead of the chosen one, even for a fully greedy policy. It also brings training closer to the 5% used in evaluation — a 5-point gap instead of 15. |
+    | Episodes | `1000` | Chosen from a measured 5-game timing probe on this laptop's CPU, which put 1,000 games at roughly one to one-and-a-half hours of compute — the largest budget that fitted one sitting. More games means more learning updates (updates ≈ (decisions − 1,000) ÷ 4), and 1,000 games also gives 40 intermediate checkpoints and GIFs, one every 25 games. |
+
+[4] vault/raw/Custom LLM Project.md — Custom LLM — Class 4 (nanoGPT, word tokens) > Evidence > One real gradient and weight update (lines 208-211)  score 2.96
+    The learning rate here is **1e-05, not the 0.001 I chose**, because the notebook warms up
+    over the first `min(100, steps/10)` = 100 steps: at step 0 the multiplier is 1/100. This is
+    the concrete reason LEARNING_RATE is a peak and not a constant. Repeat this arithmetic
+    111,872 times per step, 3,000 times, and the loss falls from 4.93 to 0.68.
+
+[5] vault/raw/Custom LLM Project.md — Custom LLM — Class 4 (nanoGPT, word tokens) > Evidence > One real gradient and weight update (lines 190-210)  score 2.83
+    ### One real gradient and weight update
+    
+    From `first_update` in [inspection.json](results/exp1-starter/inspection.json), captured at
+    **step 0**, coordinate 0 of `customer`'s embedding:
+    
+    ```
+    before   = -0.057591915130615234
+    gradient =  0.0006925859488546848
+    lr       =  0.00001            (1e-05, not 0.001 — see below)
+    after    = -0.05760190635919571
+    ```
+    
+    Change = −0.000009991. The gradient says "increasing this number would increase the loss",
+    so the optimiser moves it *down*. The size is `lr × 1` ≈ 1e-05 rather than
+    `lr × gradient` ≈ 7e-09, because **AdamW normalises by the running magnitude of the
+    gradient** — at the very first step the ratio of gradient to its own RMS is ≈ 1, so the step
+    is essentially the full learning rate in whichever direction reduces loss.
+    
+    The learning rate here is **1e-05, not the 0.001 I chose**, because the notebook warms up
+    over the first `min(100, steps/10)` = 100 steps: at step 0 the multiplier is 1/100. This is
+    the concrete reason LEARNING_RATE is a peak and not a constant. Repeat this arithmetic
+(step took 0.5 s)
+
+===== wiki ask (single example, saved card) =====
+ask · local · gemma4:e2b · retrieved 5 passage(s)
+
+The learning rate used for the MNIST model was 0.5 [S2].
+
+Citations:
+  [S2] vault/raw/MNIST From Scratch Log.md — Class 3 — MNIST from scratch, run log — lines 1-7
+Check: cited
+Time: 21.88 s
+Saved: evidence\ask\what-learning-rate-did-i-use-for-the-mni.md
+(step took 22.4 s)
+
+===== wiki eval: the four ask-mode tests =====
+T1: cited                    retrieved-expected=yes key-terms=yes 32.99 s  -> evidence/offline/T1.md
+T2: cited                    retrieved-expected=yes key-terms=yes 27.74 s  -> evidence/offline/T2.md
+T3: cited                    retrieved-expected=yes key-terms=yes 28.58 s  -> evidence/offline/T3.md
+T4: insufficient-evidence    retrieved-expected=n/a key-terms=yes 25.23 s  -> evidence/offline/T4.md
+Internet reachable: False. Loaded model memory: 1.01 GB. Summary: evidence\offline\ask-tests-summary.json
+(step took 115.7 s)
+
+===== wiki modecheck: chat / search / ask boundaries =====
+C1 chat: done
+C2 chat: done
+C3 chat: done
+C4 chat: done
+C5 chat: done
+C6 search: done
+C7 ask: done
+Saved: evidence\offline\mode-checks.md
+(step took 72 s)
+
+===== wiki doctor (memory with model loaded, after) =====
+{
+  "device": {
+    "captured_at": "2026-09-30T10:35:34",
+    "os": "Windows 11 (10.0.26200)",
+    "machine": "AMD64",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "cpu_threads": 8,
+    "ram_total_gb": 33.9,
+    "ram_available_gb": 4.8,
+    "gpus": [
+      "Intel(R) Arc(TM) 140V GPU (16GB)"
+    ],
+    "disk_free_gb": 533.0,
+    "python": "3.13.14",
+    "ollama_cli": "ollama version is 0.35.0"
+  },
+  "runtime": {
+    "backend": "ollama",
+    "url": "http://127.0.0.1:11434",
+    "model": "gemma4:e2b",
+    "ollama_version": "0.35.0",
+    "digest": "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2",
+    "file_size_gb": 4.59,
+    "details": {
+      "parent_model": "gemma4-validation-20260929:e2b-imatrix-attention-q6-q8-draft2",
+      "format": "gguf",
+      "family": "gemma4",
+      "families": [
+        "gemma4"
+      ],
+      "parameter_size": "4.6B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 1536
+    },
+    "installed_models": [
+      "gemma4:e2b"
+    ],
+    "loaded_memory_gb": 1.01,
+    "loaded_vram_gb": 0.0,
+    "context_length": 8192,
+    "ollama_process_memory_gb": 6.1
+  },
+  "internet_reachable": false,
+  "config": {
+    "model": "gemma4:e2b",
+    "ollama_url": "http://127.0.0.1:11434",
+    "num_ctx": 8192,
+    "ask_top_k": 5,
+    "chunk_words": 160
+  }
+}
+Saved: evidence\offline\after\doctor.json
+(step took 2.5 s)
+
+===== ollama ps =====
+NAME          ID              SIZE      PROCESSOR    CONTEXT    UNTIL              
+gemma4:e2b    b37049369adf    1.0 GB    100% CPU     8192       4 minutes from now    
+(step took 0.1 s)
+
+===== Network check at end: internet reachable = False =====
+finished 2026-09-30T10:35:37
+(step took 0 s)

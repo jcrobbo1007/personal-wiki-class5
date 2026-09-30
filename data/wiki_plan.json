@@ -82,7 +82,7 @@
         "mnist": ["Class 3 — MNIST from scratch"]
       },
       "related": [
-        ["Ms Pac-Man DQN", "0.0002 with Adam"],
+        ["Ms Pac-Man DQN", "0.0002, doubled from the 0.0001 reference"],
         ["Custom nanoGPT LLM", "0.001 peak with warmup"],
         ["MNIST From Scratch", "0.5 with plain gradient descent"]
       ]

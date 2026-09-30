@@ -60,6 +60,13 @@ class HarnessTests(unittest.TestCase):
         self.assertTrue(any("S7" in n for n in chk["notes"]))
         self.assertTrue(any("999" in n for n in chk["notes"]))
 
+    def test_citation_check_reads_grouped_labels(self):
+        passages = [{"text": "lr 0.0002", "path": "a", "section": "s", "line_start": 1, "line_end": 1},
+                    {"text": "peak 0.001", "path": "b", "section": "s", "line_start": 2, "line_end": 2}]
+        cites, chk = check_citations("0.0002 and 0.001 [S1, S2].", passages)
+        self.assertEqual([c["label"] for c in cites], ["S1", "S2"])
+        self.assertEqual(chk["status"], "cited")
+
     def test_chat_routing(self):
         s = ChatSession(self.cfg, self.client, self.index)
         self.assertFalse(s.route("what can you help me with?")[0])

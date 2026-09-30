@@ -12,7 +12,8 @@ from .config import ROOT
 from .retrieval import format_passage
 
 INSUFFICIENT = "INSUFFICIENT EVIDENCE"
-CITE = re.compile(r"\[([SN]\d+)\]")
+# One bracket may hold several labels: [S1] or [S4, S5].
+CITE = re.compile(r"\[([SN]\d+(?:\s*,\s*[SN]\d+)*)\]")
 NUM = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
 
 
@@ -62,7 +63,8 @@ def ask(cfg, client, index, question):
 def check_citations(answer, passages, prefix="S"):
     """Verify labels exist and numbers in the answer appear in the cited passages."""
     labels = {f"{prefix}{i}": r for i, r in enumerate(passages, 1)}
-    used = [c for c in dict.fromkeys(CITE.findall(answer)) if c.startswith(prefix)]
+    found = [c.strip() for group in CITE.findall(answer) for c in group.split(",")]
+    used = [c for c in dict.fromkeys(found) if c.startswith(prefix)]
     notes, valid = [], []
     for c in used:
         if c in labels:

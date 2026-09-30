@@ -1,0 +1,55 @@
+{
+  "notes": [
+    {
+      "note": "vault/wiki/Concepts/Deep Q-Networks.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Embeddings and Attention.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Evaluation and Small Samples.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Exploration vs Exploitation.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Learning Rate Choices.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Loss vs Real Performance.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Concepts/Translation Sensitivity.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Projects/Custom nanoGPT LLM.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Projects/MNIST From Scratch.md",
+      "reviewed": "true",
+      "issues": []
+    },
+    {
+      "note": "vault/wiki/Projects/Ms Pac-Man DQN.md",
+      "reviewed": "true",
+      "issues": []
+    }
+  ],
+  "problems": 0
+}

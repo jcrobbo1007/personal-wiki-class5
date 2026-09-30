@@ -1,0 +1,85 @@
+{
+  "mode": "ask",
+  "execution": "local",
+  "model": "gemma4:e2b",
+  "question": "How much did I pay for cloud GPU time to train the custom LLM?",
+  "retrieved": [
+    {
+      "id": "custom-llm:20-26",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > My choices and prediction",
+      "line_start": 20,
+      "line_end": 26,
+      "text": "## My choices and prediction\n\n| Choice | Value | Why |\n| --- | --- | --- |\n| Corpus | `classroom` (exp 1); `classroom` + `corpus/extension/` (exp 2) | Written by me for this assignment — see [corpus/extension/](corpus/extension/). 289 new unique passages. |\n| Training steps | 3,000 | The 10-step setup run measured 0.416 s, so 3,000 steps extrapolated to ~2 minutes (actual: 33.5 s and 35.6 s — the extrapolation overshot because setup cost is fixed, not per-step). The reference run's validation loss plateaus between 1,500 and 3,000, and mine did too (0.7182 → 0.7061), so a larger budget mostly buys overfitting risk rather than new capability. |\n| Learning rate | 0.001 | Class reference. This is a **peak**, not a constant: the notebook applies 100-step warmup then cosine decay, so the first update actually used lr = 1e-05 (see the weight-update section). Much higher risks loss spikes or divergence; much lower under-uses a 3,000-step budget. |",
+      "score": 6.08,
+      "label": "S1"
+    },
+    {
+      "id": "custom-llm:26-31",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > My choices and prediction",
+      "line_start": 26,
+      "line_end": 31,
+      "text": "| Learning rate | 0.001 | Class reference. This is a **peak**, not a constant: the notebook applies 100-step warmup then cosine decay, so the first update actually used lr = 1e-05 (see the weight-update section). Much higher risks loss spikes or divergence; much lower under-uses a 3,000-step budget. |\n| Extension categories | **opposites** (cheap coverage win) and **negation** (hard pattern test) | One category whose pattern resembles the starter templates, one that requires carrying a correction across a sentence boundary. The pair was chosen so the comparison could show a coverage gain and a pattern-learning limit separately — which is what happened. |\n\nEverything else was left untouched: seed 42, the 90/10 deduplicated-passage split, the\nfixed 20+20 evaluation panels, the sampling settings, the temperature set, and the model\nconfig. Only section 1 of the notebook was edited.",
+      "score": 5.67,
+      "label": "S2"
+    },
+    {
+      "id": "pacman-dqn:189-210",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3 > Gameplay",
+      "line_start": 189,
+      "line_end": 210,
+      "text": "**After 500 episodes** (same seed 101, notebook's one-game check: 510 points)\n\n![After 500 episodes](results/demos/episode_0500.gif)\n\n**After 1,000 episodes** (same seed 101, one-game check: 520 points)\n\n![After 1,000 episodes](results/demos/episode_1000.gif)\n\nThrough the clip their on-screen scores stay close to the untrained agent's, and both lose a life\n*earlier* in the clip than the untrained agent did — at 1,000 episodes it runs straight into the\ncyan ghost. Neither shows any sign of steering away from ghosts. On this one seed and this short\nexcerpt, trained play looks much like untrained play; the gains show up over whole games and\nacross seeds, not here.\n\n**Best trained game** (best of the five evaluation games — seed 303, 1,130 points — first 20\nseconds at 4× speed)\n\n![Best trained](results/demos/final_best.gif)\n\nIt eats a power pellet about two-thirds of the way through the clip. For most of the time the\nghosts are blue the score does not move, and then jumps by 200 at the very end of the clip —\nconsistent with catching one blue ghost. One clip can't tell whether that was pursuit or luck;",
+      "score": 5.54,
+      "label": "S3"
+    },
+    {
+      "id": "custom-llm:208-211",
+      "source_id": "custom-llm",
+      "path": "vault/raw/Custom LLM Project.md",
+      "section": "Custom LLM — Class 4 (nanoGPT, word tokens) > Evidence > One real gradient and weight update",
+      "line_start": 208,
+      "line_end": 211,
+      "text": "The learning rate here is **1e-05, not the 0.001 I chose**, because the notebook warms up\nover the first `min(100, steps/10)` = 100 steps: at step 0 the multiplier is 1/100. This is\nthe concrete reason LEARNING_RATE is a peak and not a constant. Repeat this arithmetic\n111,872 times per step, 3,000 times, and the loss falls from 4.93 to 0.68.",
+      "score": 4.22,
+      "label": "S4"
+    },
+    {
+      "id": "pacman-dqn:227-239",
+      "source_id": "pacman-dqn",
+      "path": "vault/raw/Pac-Man DQN Project.md",
+      "section": "Ms. Pac-Man DQN — Class 3 > Reading this against the Class 3 material",
+      "line_start": 227,
+      "line_end": 239,
+      "text": "## Reading this against the Class 3 material\n\n- **The agent learned the policy its rewards describe, not the one I had in mind.** With\n  clipping, a pellet, a power pellet and a ghost are all worth the same +1 to the learner, and\n  losing a life is worth nothing: `terminal_on_life_loss` is `false`, so after a death the target\n  still includes the value of the next screen. With a 0.99 discount, rewards more than a few\n  hundred decisions away barely count. So the reward signal pays for collecting things soon and\n  hardly charges for dying. That is exactly the pattern in the log: points per decision up, game\n  length flat.\n- **Loss is not the metric that matters.** The middle panel measures prediction error against a\n  target that moves as the network's own estimates grow, not play quality. Here loss rose while\n  score improved slightly, and fell while score peaked — the two moved independently, so a falling\n  (or rising) loss curve would have told me nothing about play.",
+      "score": 4.15,
+      "label": "S5"
+    }
+  ],
+  "answer": "INSUFFICIENT EVIDENCE: The provided source passages do not contain information about the cost of cloud GPU time for training the custom LLM.",
+  "model_called": true,
+  "stats": {
+    "backend": "ollama",
+    "model": "gemma4:e2b",
+    "wall_seconds": 25.23,
+    "prompt_tokens": 1746,
+    "output_tokens": 29,
+    "load_seconds": 0.0,
+    "total_seconds": 25.23,
+    "tokens_per_second": 25.8
+  },
+  "prompt_chars": 5008,
+  "citations": [],
+  "check": {
+    "status": "insufficient-evidence",
+    "notes": []
+  },
+  "run_info": {
+    "internet_reachable": false,
+    "run_at": "2026-09-30T10:33:56"
+  }
+}

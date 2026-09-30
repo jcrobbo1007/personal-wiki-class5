@@ -1,10 +1,3 @@
-<!--
-FILL-IN RULES (delete this comment before submitting):
-Every {{placeholder}} is replaced with a value from a file under evidence/ or data/, or the
-line is deleted. Never invent a number, an answer or a screenshot. Failed or weak results
-stay in and get explained. See CLAUDE.md.
--->
-
 # Personal Wiki CLI — local Gemma + RAG (Class 5, Assignment 4)
 
 A terminal assistant over my own notes from *From Zero to AI Agents*. My three earlier project
@@ -13,9 +6,10 @@ Python harness gives three modes on top: **chat** with a study-partner persona, 
 cited factual answers, and **search** for the original passages. Everything runs on my laptop
 with the internet off.
 
-**Result in one line:** {{e.g. "3 of 3 answerable questions answered with correct citations,
-and the unsupported question refused with INSUFFICIENT EVIDENCE, all offline on gemma4:e2b" —
-taken from evidence/offline/ask-tests-summary.json and the assessed cards}}
+**Result in one line:** Of the three answerable questions, two were answered correctly with correct
+citations. The two-source question (T3) was half right: Pac-Man's 0.0002 was correct, but it
+misread the LLM's learning rate. The unsupported question was refused with INSUFFICIENT
+EVIDENCE. All four ran offline on `gemma4:e2b` (CPU only).
 
 | Jump to | |
 |---|---|
@@ -59,37 +53,44 @@ point at real notes.
 
 | | |
 |---|---|
-| OS | {{device.os}} |
-| CPU | {{device.cpu}}, {{device.cpu_threads}} threads |
-| RAM | {{device.ram_total_gb}} GB total, {{device.ram_available_gb}} GB available at run time |
-| GPU / VRAM | {{device.gpus, or "none used: CPU inference"}} |
-| Free disk | {{device.disk_free_gb}} GB |
-| Python | {{device.python}} (standard library only, no pip packages) |
+| OS | Windows 11 (10.0.26200), x64 |
+| CPU | Intel Core Ultra 7 258V, 8 threads |
+| RAM | 33.9 GB total; 8.4 GB available at the start of the offline run, 4.8 GB with the model loaded at the end |
+| GPU / VRAM | Intel Arc 140V (integrated, shares system RAM). Not used: Ollama reports `100% CPU` and 0.0 GB VRAM |
+| Free disk | 532.9 GB |
+| Python | 3.13.14 (standard library only, no pip packages) |
 
 **Model and runtime:**
 
 | | |
 |---|---|
-| Model | `gemma4:e2b` (Gemma 4 E2B), digest `{{runtime.digest}}` |
-| Quantization | {{runtime.details.quantization_level}} ({{runtime.file_size_gb}} GB file) |
-| Runtime | Ollama {{runtime.ollama_version}}, local HTTP API at `127.0.0.1:11434` |
+| Model | `gemma4:e2b` (Gemma 4 E2B), digest `b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2` |
+| Quantization | Q4_K_M (4.59 GB file, including the vision projector) |
+| Runtime | Ollama 0.35.0, local HTTP API at `127.0.0.1:11434` |
 | Official download | `ollama pull gemma4:e2b` ([ollama.com/library/gemma4:e2b](https://ollama.com/library/gemma4:e2b)). Weights are not committed. |
 | Context | `num_ctx` 8192; temperature 0.0 for ask, 0.6 for chat, 0.2 for ingest |
 
-**Why E2B.** {{Two or three sentences grounded in the measurements below: this laptop runs on
-CPU (or name the GPU); E2B loaded at X GB, leaving Y GB of RAM free; an ask answer took Z s.
-E4B would roughly double load memory and slow answers, and the tests below did / did not show
-a quality problem that would justify it.}}
+**Why E2B.** This laptop runs the model on the CPU; the integrated Arc GPU is not used. With E2B
+loaded, the model runner held about 6 GB, and 4.8 GB of RAM was still free at the end of the
+run. Each ask answer took 25–33 s. E4B would need more memory and answer more slowly on the same
+CPU. The one wrong answer (T3) came from retrieval missing the key passage, not from the model
+running out of ability, so a larger model would not obviously have fixed it.
 
 **Measured** (from `evidence/offline/after/doctor.json`, `ask-tests-summary.json` and the ingest log):
 
 | Measurement | Value |
 |---|---|
-| Model memory once loaded (Ollama `/api/ps`) | {{runtime.loaded_memory_gb}} GB |
-| Ollama process memory (working set) | {{runtime.ollama_process_memory_gb}} GB |
-| Full ingest of 3 sources to 10 notes | {{wall_seconds}} s |
-| Ask answer, per question (T1–T4) | {{seconds per test}} |
-| Chat reply | {{typical seconds from mode-checks.md}} |
+| Model memory once loaded (Ollama `/api/ps`) | 1.01 GB (as reported; see note) |
+| Ollama process memory (working set, server + `llama-server` runner) | 6.1 GB after all tests (5.96 GB right after T1–T4) |
+| Full ingest of 3 sources to 10 notes | 338.8 s (17–51 s per note) |
+| Ask answer, per question (T1–T4) | 33.0 / 27.7 / 28.6 / 25.2 s (about 1,600–2,100 prompt tokens, 20–30 output tokens/s) |
+| Chat reply | 3–9 s for short conversational turns (C1, C2, C4); 18–19 s when notes are looked up (C3, C5) |
+
+Note on memory: Ollama's `/api/ps` reports 1.01 GB for the loaded model, but the process that
+actually runs it (`llama-server`) had a 6.1 GB working set. The larger figure is what the laptop
+actually gives up. In the online rehearsal I found the harness only counted processes named
+`ollama*`, which missed `llama-server`, and fixed that in
+[`harness/system.py`](harness/system.py) before the offline run.
 
 **Commands** (Windows PowerShell, from the repo root; on Mac/Linux use `python3 wiki.py` instead of `.\wiki`):
 
@@ -154,7 +155,7 @@ that history.
 
 - **Passage size.** Chunks follow Markdown sections, so a passage stays inside one topic, and
   run about 160 words with 40 words of overlap, so a table row and its explanation usually land
-  together. Ask sends at most 5 passages (roughly {{prompt_chars from a card}} characters). That
+  together. Ask sends at most 5 passages (roughly 4,000–5,000 characters in T1–T4). That
   fits easily in the 8k context and leaves room for the answer.
 - **Retrieval method.** Keyword BM25 with light stemming, so "moved" meets "Move". It needs no
   embedding model, so there is nothing extra to download and nothing that could quietly call a
@@ -182,7 +183,12 @@ that history.
   not in the plan.
 - **Model settings.** Temperature 0 for ask gives repeatable, least-random answers. Gemma's
   thinking mode is switched off (`think: false`) so replies are direct and faster on CPU.
-  {{Note any setting changed after a failure, and the rerun, here.}}
+  No model or retrieval setting was changed after any result, so there is one offline run and
+  no rerun. The online rehearsal ([`evidence/rehearsal/`](evidence/rehearsal), labelled online)
+  found two harness measurement bugs, both fixed before the offline run and neither affecting
+  answers. `check_citations()` read `[S4]` but not grouped citations like `[S4, S5]`, which
+  produced false warnings; there is now a unit test for it. The process-memory figure also missed
+  the `llama-server` runner.
 
 ## 5. The wiki in Obsidian
 
@@ -197,15 +203,45 @@ Concepts are colour-grouped.
 3. **Graph view** (filter `path:wiki/`, attachments off):
    ![Graph](evidence/screenshots/obsidian-graph.png)
 
-**Traced path:** `index.md` → [[{{a project note}}]] → its link to [[{{a concept note}}]] →
-Sources → `{{raw file}}`, section "{{section}}", which contains "{{short quote}}".
+**Traced path:** `index.md` → Ms Pac-Man DQN (under Projects) → its Related notes link to
+Learning Rate Choices → Sources, E1 → `raw/Pac-Man DQN Project.md`, section "My three settings",
+line 33, which contains "Doubled from the 0.0001 reference because the scarce resource was
+learning updates".
 
-**Review of generated notes.** {{What `wiki check` flagged (evidence/offline/wiki-check.json)
-and what was corrected by reading the originals, e.g. "Gemma wrote 0.001 as 0.01 in Learning
-Rate Choices; corrected against Custom LLM Project.md line 26". Originals were never edited.
-Reviewed notes are marked `reviewed: true`.}}
+**Review of generated notes.** `wiki check` flagged nothing: 0 issues in
+[`evidence/offline/wiki-check.json`](evidence/offline/wiki-check.json). It only checks that each
+number appears *somewhere* in the cited source, though, so reading every note against its
+sections still found these errors, all fixed in `vault/wiki/`:
 
-**Duplicate check:** re-ingesting `mnist` offline left {{N}} notes before and {{N}} after, with
+- **Evaluation and Small Samples:** "589.0 to 712.2" was presented as the Pac-Man score change.
+  Those are decisions per game; the score went 492.0 → 876.0 (Pac-Man DQN Project.md lines 110–117).
+  "The agent" scoring 16/16 was corrected to "the trained model", in both LLM experiments.
+- **Exploration vs Exploitation:** said the proposed next experiment was ending episodes on life
+  loss. The source says that is what I *would* want but did not propose; the proposal is replay
+  capacity 5,000 → 25,000 (lines 269–288). Also corrected "the fixed rate is defensible because" to
+  "the lower rate is defensible partly because" (line 31).
+- **Ms Pac-Man DQN:** "training took 12:48" hid that about 11.5 h of that was the laptop asleep
+  (actual training ≈ 1:16, line 91). The summary said evaluation "confirmed" the gain; the source
+  says the direction is supported but the size is poorly estimated (lines 6–12).
+- **Translation Sensitivity:** added the 5 px result (11.5%, chance 10%), fixed cause and effect
+  (the blurry stencils are the diagnostic, not a result), and softened "convolutions are
+  necessary" to the source's "the argument for convolutions" (MNIST log lines 44–57).
+- **MNIST From Scratch:** the loss formula had an extra `)` (log line 14).
+- **Embeddings and Attention:** "antonyms are grouped together" was corrected to the source's
+  finding: every *antonym-slot* word shares one neighbourhood (`quiet` → `green` 0.692, `noisy`
+  0.682, `hot` 0.678). "The model encoded a conclusion" was reworded; the conclusion is mine
+  (Custom LLM Project.md lines 254–269).
+- **Custom nanoGPT LLM:** matched 133 / 398 vocabulary types to exp 1 / exp 2 (line 87).
+- **Learning Rate Choices:** the related-note label "0.0002 with Adam" (from `data/wiki_plan.json`,
+  not Gemma) names an optimiser the Pac-Man source never states. It now says "doubled from the
+  0.0001 reference" in the note and the plan.
+
+The originals were never edited: `vault/raw/` is unchanged, and the SHA-256 hashes in
+`data/source_catalog.json` still match. All 10 notes are marked `reviewed: true`, and
+`wiki check` after the review is still clean
+([`evidence/review/wiki-check.json`](evidence/review/wiki-check.json)).
+
+**Duplicate check:** re-ingesting `mnist` offline left 10 notes before and 10 after, with
 no new files (see the transcript, step "Duplicate check").
 
 ## 6. Evidence: four ask-mode tests (offline)
@@ -218,13 +254,21 @@ citations, and my assessment.
 
 | Test | Question | Retrieved expected source? | Answer | Citations support it? | Card |
 |---|---|---|---|---|---|
-| T1 direct | Mean trained Pac-Man score vs. baseline | {{}} | {{}} | {{}} | [T1](evidence/offline/T1.md) |
-| T2 paraphrased | Why the digit classifier failed when digits moved | {{}} | {{}} | {{}} | [T2](evidence/offline/T2.md) |
-| T3 two sources | Learning rates for Pac-Man and the LLM | {{}} | {{}} | {{}} | [T3](evidence/offline/T3.md) |
-| T4 unsupported | Cloud GPU cost for the LLM | n/a | {{}} | {{}} | [T4](evidence/offline/T4.md) |
+| T1 direct | Mean trained Pac-Man score vs. baseline | Yes, rank 1 (table) and 2 (headline) | 876.0 vs. 492.0 — **pass** | Yes, [S2] states both | [T1](evidence/offline/T1.md) |
+| T2 paraphrased | Why the digit classifier failed when digits moved | Yes, but only rank 5 of 5 | Learned pixel coordinates, not shapes — **pass** | Yes, [S5] (one small cause/effect slip) | [T2](evidence/offline/T2.md) |
+| T3 two sources | Learning rates for Pac-Man and the LLM | Partly: Pac-Man row yes; LLM "My choices" row no | 0.0002 right; LLM "1e-05, not 0.001" inverted — **partial** | Pac-Man yes; LLM citations real but misread | [T3](evidence/offline/T3.md) |
+| T4 unsupported | Cloud GPU cost for the LLM | n/a | INSUFFICIENT EVIDENCE — **pass** | n/a, nothing invented | [T4](evidence/offline/T4.md) |
 
-{{One short paragraph per failure or weak answer: what went wrong (retrieval or model), and
-whether anything was changed and rerun. Keep the earlier result.}}
+**T3 (partial).** The fault started in retrieval and was finished by the model. For the LLM
+half, BM25 returned the weight-update section, which contains "1e-05, not the 0.001 I chose",
+but not the "My choices and prediction" row (line 26) that states 0.001 as the chosen peak rate.
+Gemma then read that sentence backwards and answered "1e-05, not 0.001". The automatic check
+passed because both numbers really are in the cited text, which is why each card is also read by
+hand. Nothing was changed or rerun.
+
+**T2 (pass, weak ranking).** The expected "Shift experiment" passage only just made the top 5.
+The paraphrased wording shares more keywords with "Three mistakes". Gemma still ignored the
+higher-ranked passages and answered correctly from [S5].
 
 ## 7. Evidence: chat and search mode checks (offline)
 
@@ -233,13 +277,13 @@ are one chat session in order.
 
 | Check | Expected | Observed |
 |---|---|---|
-| C1 chat "what can we do?" | Capabilities, no lookup, no refusal | {{}} |
-| C2 chat "what can you help me with?" | Same | {{}} |
-| C3 chat: draft a 3-step plan | Suggestions labelled; note facts cited | {{}} |
-| C4 chat "make that shorter" | Uses C3 from the conversation | {{}} |
-| C5 chat: claim "5,000 points" | Stays in chat only | {{}} |
-| C6 search "exploration rate" | Passages + paths, no model call | {{}} |
-| C7 ask "Did my agent score 5,000…?" | Uses sources (best game 1,130), not the chat claim | {{}} |
+| C1 chat "what can we do?" | Capabilities, no lookup, no refusal | Pass: listed capabilities, no lookup, 8.6 s |
+| C2 chat "what can you help me with?" | Same | Pass: same, no lookup |
+| C3 chat: draft a 3-step plan | Suggestions labelled; note facts cited | Partial: correct plan from the notes, but no [N#] citations and not labelled as a suggestion |
+| C4 chat "make that shorter" | Uses C3 from the conversation | Pass: shortened C3, no lookup |
+| C5 chat: claim "5,000 points" | Stays in chat only | Partial: stayed in chat, but Margin accepted it ("That's a solid result") although its own notes said 1,130 |
+| C6 search "exploration rate" | Passages + paths, no model call | Pass: 5 passages with paths and lines, model not called |
+| C7 ask "Did my agent score 5,000…?" | Uses sources (best game 1,130), not the chat claim | Pass on the boundary: reported 1,130 from the sources, ignored the claim; but it was labelled INSUFFICIENT EVIDENCE with no citation |
 
 ## 8. Offline demonstration
 
@@ -251,18 +295,26 @@ evidence record also carries its own `internet_reachable: false` check.
 
 ![Offline terminal](evidence/screenshots/offline-terminal.png)
 
-{{Optional: live chat screenshot, evidence/screenshots/offline-chat.png}}
+The transcript records the network check as False at the start and at the end. I briefly
+reconnected once during the ingest step, to message the coding assistant that helped me run
+this. The ingest only talks to Ollama on `127.0.0.1`, and its own log records internet reachable
+= False when it finished. Every later evidence record also says False. The online rehearsal is
+kept separately, in [`evidence/rehearsal/`](evidence/rehearsal), and is labelled as online.
 
 ## 9. Reflection: one limitation and one improvement
 
-{{One real failure or limitation seen in the evidence, with the cause if known. A likely
-candidate: keyword retrieval on the paraphrased T2 question ranked the MNIST "Three mistakes"
-section above "Shift experiment", because the question's words ("digits", "pixels") appear
-more often there. Say whether Gemma still answered correctly from the lower-ranked passage.}}
+**Limitation: keyword retrieval decides what the model can get right.** In T3 BM25 never
+surfaced the table row stating the LLM's chosen rate (0.001). The weight-update section outranked
+it because it literally contains "the 0.001 I chose", and the Pac-Man file took three of the five
+slots. With only a sentence that contrasts 1e-05 against 0.001, a small model got it backwards.
+In T2 the right passage scraped in at rank 5, behind passages that just share more of the
+question's words. The citation check cannot catch this kind of error, because a misread number
+is still "found" in its cited passage.
 
-**Improvement I'd try:** {{e.g. hybrid retrieval that adds a small local embedding model
-(such as `embeddinggemma` through Ollama) to BM25 and merges the rankings, then reruns T1–T4 to
-check that T2 ranks the shift passage first without losing T4's refusal.}}
+**Improvement I'd try:** hybrid retrieval. Add a small local embedding model (for example
+`embeddinggemma` through Ollama) next to BM25 and merge the two rankings. Then rerun T1–T4
+offline, and check that T3 retrieves the "My choices and prediction" row, that T2 ranks the
+shift passage first, and that T4 still refuses.
 
 ## Repository layout
 

@@ -79,14 +79,15 @@ def cpu_name():
 
 def ollama_process_memory_gb():
     """Resident memory of all Ollama processes (server + model runner)."""
+    # Recent Ollama builds run the model in a child process named llama-server.
     if sys.platform == "win32":
         out = _run(["powershell", "-NoProfile", "-Command",
-                    "(Get-Process | Where-Object { $_.ProcessName -like 'ollama*' } | Measure-Object WorkingSet64 -Sum).Sum"])
+                    "(Get-Process | Where-Object { $_.ProcessName -like 'ollama*' -or $_.ProcessName -like 'llama-server*' } | Measure-Object WorkingSet64 -Sum).Sum"])
         try:
             return round(int(out) / 1e9, 2)
         except ValueError:
             return None
-    out = _run(["ps", "-C", "ollama", "-o", "rss="]) or _run(["sh", "-c", "ps -axo rss,comm | grep -i ollama | awk '{s+=$1} END {print s}'"])
+    out = _run(["ps", "-C", "ollama", "-o", "rss="]) or _run(["sh", "-c", "ps -axo rss,comm | grep -iE 'ollama|llama-server' | awk '{s+=$1} END {print s}'"])
     try:
         return round(sum(int(x) for x in out.split()) * 1024 / 1e9, 2)
     except ValueError:
